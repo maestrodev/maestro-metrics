@@ -1,3 +1,4 @@
+require 'maestro_metrics/version'
 require 'mongo'
 require 'statsd'
 

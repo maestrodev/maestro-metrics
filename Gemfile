@@ -9,4 +9,5 @@ group :test do
   gem 'rake'
   gem 'rspec'
   gem 'rcov'
+  gem 'mongo_mapper'
 end

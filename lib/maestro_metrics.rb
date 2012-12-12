@@ -32,22 +32,31 @@ module Maestro
         statsd.time(metric, sample_rate, &block)
       end
 
-      def log(metrics)
-        mongo_collection.insert(metrics)
+      def log(collection, metrics)
+        mongo_collection(collection).insert(metrics)
+      end
+
+      def aggregate(collection, pipeline=nil)
+        mongo_collection(collection).aggregate(pipeline)
+      end
+
+      def find(collection, selector={}, opts={})
+        mongo_collection(collection).find(selector, opts)
       end
 
       private
 
       def mongo_client
-        @mongo_client ||= MongoClient.new(config[:mongo_host], config[:mongo_port])
+        puts @config.inspect
+        @mongo_client ||= MongoClient.new(@config[:mongo_host], @config[:mongo_port])
       end
 
       def mongo_db
         @mongo_db ||= mongo_client['maestro-metrics']
       end
 
-      def mongo_collection
-        @mongo_collection ||= mongo_db['raw']
+      def mongo_collection(name)
+        mongo_db[name]
       end
 
 

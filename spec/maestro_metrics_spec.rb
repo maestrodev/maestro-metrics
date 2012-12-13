@@ -84,6 +84,7 @@ describe Maestro::Metrics do
     end
 
     it 'should log a complex document' do
+      Metrics.mock!
 
       require 'mongo_mapper'
 
@@ -119,7 +120,7 @@ describe Maestro::Metrics do
                                                    'minRunTime'       => { '$min' => '$run_time' }
                                  }
                                    } ] )
-      puts results.inspect
+      
     end
   end
 end

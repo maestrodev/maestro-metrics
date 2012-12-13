@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    maestro_metrics (0.0.1)
+    maestro_metrics (0.0.2)
       mongo
       statsd
       statsd-ruby
@@ -31,6 +31,7 @@ GEM
     multi_json (1.5.0)
     plucky (0.5.2)
       mongo (~> 1.5)
+    rake (10.0.2)
     rspec (2.12.0)
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
@@ -51,4 +52,5 @@ PLATFORMS
 DEPENDENCIES
   maestro_metrics!
   mongo_mapper
+  rake
   rspec

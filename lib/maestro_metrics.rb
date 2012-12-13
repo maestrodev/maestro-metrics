@@ -1,16 +1,88 @@
 require 'maestro_metrics/version'
+require 'singleton'
 require 'mongo'
 require 'statsd'
 
 module Maestro
   module Metrics
 
-    class Metrics
+    @mocking = false
+    @config = {}
+
+    def Metrics.mock!
+      @mocking = true
+    end
+
+    def Metrics.unmock!
+      @mocking = false
+    end
+
+    def Metrics.mock?
+      @mocking
+    end
+
+    def Metrics.mocking?
+      @mocking
+    end
+
+    def Metrics.configure(config={})
+      @config = config unless config.nil?
+    end
+
+    def Metrics.count(metric, value, sample_rate=1)
+      logger.count(metric, value, sample_rate)
+    end
+
+    def Metrics.timing(metric, value, sample_rate=1)
+      logger.timing(metric, value, sample_rate)
+    end
+
+    def Metrics.increment(metric, sample_rate=1)
+      logger.increment(metric, sample_rate)
+    end
+
+    def Metrics.decrement(metric, sample_rate=1)
+      logger.decrement(metric, sample_rate)
+    end
+
+    def Metrics.time(metric, sample_rate=1, &block)
+      logger.time(metric, sample_rate, &block)
+    end
+
+    def Metrics.log(collection, metrics)
+      logger.log(collection, metrics)
+    end
+
+    def Metrics.aggregate(collection, pipeline=nil)
+      logger.aggregate(collection, pipeline)
+    end
+
+    def Metrics.find(collection, selector={}, opts={})
+      logger.find(collection, selector, opts)
+    end
+
+    protected
+
+    def self.config
+      @config
+    end
+
+    private
+
+    def self.logger
+      self.mocking? ? Mock.instance : Real.instance
+    end
+
+    class Real
 
       include Mongo
+      include Singleton
 
-      def initialize(config)
-        @config = config
+      def initialize
+        @mongo_host = Maestro::Metrics.config[:mongo_host] || 'localhost'
+        @mongo_port = Maestro::Metrics.config[:mongo_port] || 27017
+        @statsd_host = Maestro::Metrics.config[:statsd_host] || 'localhost'
+        @statsd_port = Maestro::Metrics.config[:statsd_port] || 8125
       end
 
       def count(metric, value, sample_rate=1)
@@ -48,8 +120,7 @@ module Maestro
       private
 
       def mongo_client
-        puts @config.inspect
-        @mongo_client ||= MongoClient.new(@config[:mongo_host], @config[:mongo_port])
+        @mongo_client ||= MongoClient.new(@mongo_host, @mongo_port)
       end
 
       def mongo_db
@@ -60,20 +131,51 @@ module Maestro
         mongo_db[name]
       end
 
-
       def statsd
-        @statsd ||= Statsd.new(@config[:statsd_host], @config[:statsd_port])
+        @statsd ||= Statsd.new(@statsd_host, @statsd_port)
         @statsd.namespace= 'maestro_metrics'
         @statsd
       end
 
-      def raw
-        @raw ||= Raw.new(@config)
-      end
+    end
+
+  end
+
+  class Mock
+
+    include Singleton
+
+    def count(metric, value, sample_rate=1)
 
     end
 
+    def timing(metric, value, sample_rate=1)
 
+    end
+
+    def increment(metric, sample_rate=1)
+
+    end
+
+    def decrement(metric, sample_rate=1)
+
+    end
+
+    def time(metric, sample_rate=1, &block)
+
+    end
+
+    def log(collection, metrics)
+      -1
+    end
+
+    def aggregate(collection, pipeline=nil)
+      Array.new
+    end
+
+    def find(collection, selector={}, opts={})
+      Array.new
+    end
 
   end
 

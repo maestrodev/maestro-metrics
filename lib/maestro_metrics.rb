@@ -25,7 +25,7 @@ module Maestro
       @mocking
     end
 
-    def Metrics.configure(config={})
+    def self.configure(config={})
       @config = config unless config.nil?
     end
 
@@ -79,10 +79,10 @@ module Maestro
       include Singleton
 
       def initialize
-        @mongo_host = Maestro::Metrics.config[:mongo_host] || 'localhost'
-        @mongo_port = Maestro::Metrics.config[:mongo_port] || 27017
-        @statsd_host = Maestro::Metrics.config[:statsd_host] || 'localhost'
-        @statsd_port = Maestro::Metrics.config[:statsd_port] || 8125
+        @mongo_host = Metrics.config[:mongo_host] || 'localhost'
+        @mongo_port = Metrics.config[:mongo_port] || 27017
+        @statsd_host = Metrics.config[:statsd_host] || 'localhost'
+        @statsd_port = Metrics.config[:statsd_port] || 8125
       end
 
       def count(metric, value, sample_rate=1)

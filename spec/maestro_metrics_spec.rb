@@ -120,7 +120,7 @@ describe Maestro::Metrics do
                                                    'minRunTime'       => { '$min' => '$run_time' }
                                  }
                                    } ] )
-      
+
     end
   end
 end

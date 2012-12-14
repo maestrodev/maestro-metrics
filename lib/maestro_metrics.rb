@@ -61,6 +61,17 @@ module Maestro
       logger.find(collection, selector, opts)
     end
 
+    def Metrics.to_mongo(value)
+      if value.nil? || value == ''
+        nil
+      else
+        date = value.is_a?(::Date) || value.is_a?(::Time) ? value : ::Date.parse(value.to_s)
+        ::Time.utc(date.year, date.month, date.day)
+      end
+      rescue
+      nil
+    end
+
     protected
 
     def self.config

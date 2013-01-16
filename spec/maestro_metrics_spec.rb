@@ -70,6 +70,17 @@ describe Maestro::Metrics do
 
   context 'raw metrics logging' do
 
+    it 'should have a list of collections' do
+
+
+      collection_names = ["system.indexes", "runs", "counters.login.admin_10"]
+      Metrics::Real.instance.stub(:collection_names => collection_names)
+
+      names = Metrics.collection_names
+      names.should_not be_nil
+
+    end
+
     it 'should log a hash containing raw metrics' do
 
       @collection = double('collection')

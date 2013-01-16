@@ -72,6 +72,10 @@ module Maestro
       nil
     end
 
+    def Metrics.collection_names
+      logger.collection_names
+    end
+
     protected
 
     def self.config
@@ -126,6 +130,10 @@ module Maestro
 
       def find(collection, selector={}, opts={})
         mongo_collection(collection).find(selector, opts)
+      end
+
+      def collection_names
+        mongo_db.collection_names
       end
 
       private
@@ -185,6 +193,10 @@ module Maestro
     end
 
     def find(collection, selector={}, opts={})
+      Array.new
+    end
+
+    def collection_names
       Array.new
     end
 

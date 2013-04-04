@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency('mongo')
   gem.add_dependency('statsd')
   gem.add_dependency('statsd-ruby')
+  gem.add_development_dependency('rake')
   gem.add_development_dependency('rspec')
   gem.add_development_dependency('mongo_mapper')
 end

@@ -2,6 +2,7 @@ require 'maestro_metrics/version'
 require 'singleton'
 require 'mongo'
 require 'statsd'
+require 'time'
 
 module Maestro
   module Metrics
@@ -65,8 +66,17 @@ module Maestro
       if value.nil? || value == ''
         nil
       else
-        date = value.is_a?(::Date) || value.is_a?(::Time) ? value : ::Date.parse(value.to_s)
-        ::Time.utc(date.year, date.month, date.day)
+        time = nil
+
+        if value.is_a?(::Date)
+          time = value.to_time
+        elsif value.is_a?(::Time)
+          time = value
+        else
+          time = ::Time.parse(value.to_s)
+        end
+
+        time.utc
       end
       rescue
       nil

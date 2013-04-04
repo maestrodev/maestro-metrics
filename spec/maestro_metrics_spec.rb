@@ -133,5 +133,29 @@ describe Maestro::Metrics do
                                    } ] )
 
     end
+
+    it 'should correctly convert date to mongo' do
+      d = Date.new(2001, 2, 3)
+      u = d.to_time.utc
+      m = Maestro::Metrics.to_mongo(d)
+
+      m.should == u
+    end
+
+    it 'should correctly convert time to mongo' do
+      t = Time.parse("2001-02-03 04:05:06 -0800")
+      u = t.utc
+      m = Maestro::Metrics.to_mongo(t)
+
+      m.should == u
+    end
+
+    it 'should correctly convert string datetime to mongo' do
+      s = "2001-02-03 04:05:06"
+      u = Time.parse(s).utc
+      m = Maestro::Metrics.to_mongo(s)
+
+      m.should == u
+    end
   end
 end

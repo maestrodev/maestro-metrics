@@ -153,7 +153,7 @@ module Maestro
       end
 
       def mongo_db
-        @mongo_db ||= mongo_client['maestro-metrics']
+        @mongo_db ||= mongo_client['maestro']
       end
 
       def mongo_collection(name)
@@ -162,7 +162,7 @@ module Maestro
 
       def statsd
         @statsd ||= Statsd.new(@statsd_host, @statsd_port)
-        @statsd.namespace= 'maestro_metrics'
+        @statsd.namespace= 'maestro'
         @statsd
       end
 

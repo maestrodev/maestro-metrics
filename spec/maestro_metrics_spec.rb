@@ -87,8 +87,8 @@ describe Maestro::Metrics do
       Metrics::Real.instance.stub(:mongo_collection => @collection)
 
       doc = { :name => 'testdoc' }
-      @collection.stub(:insert => 1)
-      @collection.should_receive(:insert).with(doc)
+      @collection.stub(:save => 1)
+      @collection.should_receive(:save).with(doc)
 
       Metrics.log("test", doc).should eq 1
 
@@ -100,8 +100,8 @@ describe Maestro::Metrics do
       require 'mongo_mapper'
 
       doc = {
+          :id => 1,
           :composition_id => 1,
-          :run_id => 1,
           :start_time => Time.to_mongo(Time.new),
           :user=> 'maestro',
           :trigger_type => 'manual',

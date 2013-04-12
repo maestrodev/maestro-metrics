@@ -131,7 +131,7 @@ module Maestro
       end
 
       def log(collection, metrics)
-        mongo_collection(collection).insert(metrics)
+        mongo_collection(collection).save(metrics)
       end
 
       def aggregate(collection, pipeline=nil)

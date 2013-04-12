@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    maestro_metrics (0.0.5)
+    maestro_metrics (0.0.6)
       mongo
       statsd
       statsd-ruby
@@ -15,6 +15,8 @@ GEM
     activesupport (3.2.9)
       i18n (~> 0.6)
       multi_json (~> 1.0)
+    bson (1.8.0)
+      activesupport
     bson (1.8.0-java)
       activesupport
     builder (3.0.4)

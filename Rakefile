@@ -1,45 +1,17 @@
-#!/usr/bin/env rake
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 require 'rake/clean'
 
-require File.expand_path('../lib/maestro_metrics/version', __FILE__)
+#require File.expand_path('../lib/maestro_plugin/version', __FILE__)
 
-CLEAN.include([ 'pkg', '*.gem'])
+CLEAN.include('pkg')
+CLOBBER.include('.bundle', '.config', 'coverage', 'InstalledFiles', 'spec/reports', 'rdoc', 'test', 'tmp')
 
-task :default => [:build]
+task :default => [:clean, :bundle, :spec, :build]
 
-desc "Run specs"
-RSpec::Core::RakeTask.new do |t|
-  t.pattern = "./spec/**/*_spec.rb" # don't need this, it's default.
-  t.rspec_opts = "--fail-fast --format p --color"
-  # Put spec opts in a file named .rspec in root
-end
+RSpec::Core::RakeTask.new
 
-desc "Deploy gem to Gemfury"
-task :deploy => :build do
-  require 'gemfury'
-
-  file_name = "pkg/maestro_metrics-#{Maestro::Metrics::VERSION}.gem"
-  client = Gemfury::Client.new(:user_api_key => '19mFQpkpgWC8xqPZVizB', :account => 'maestrodev')
-  # Gemfury will skip the file if it already exists. Gotta yank it first.
-  begin
-    client.yank_version("maestro_metrics", Maestro::Metrics::VERSION)
-  rescue Gemfury::InvalidGemVersion
-    # ignore if the gem does not exist.
-  rescue Gemfury::NotFound
-    # ignore if the gem does not exist.
-  end
-  puts "Uploading #{file_name} to Gemfury"
-  client.push_gem(File.new(file_name))
-end
-
-desc "Get dependencies with Bundler"
+desc 'Get dependencies with Bundler'
 task :bundle do
-  system "bundle install"
-end
-
-task :build => [:clean, :bundle, :spec]
-task :build do
-  system "gem build maestro_metrics.gemspec"
+  sh %{bundle install}
 end
